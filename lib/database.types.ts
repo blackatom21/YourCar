@@ -23,7 +23,32 @@ export type Database = {
           }
         },"public": {
           Tables: {
-            "job_parts": {
+            "job_manual_refs": {
+                  Row: {
+                    "created_at": string,"id": string,"job_id": string,"label": string | null,"manual_id": string,"page": number,"user_id": string
+                  }
+                  Insert: {
+                    "created_at"?: string,"id"?: string,"job_id": string,"label"?: string | null,"manual_id": string,"page": number,"user_id"?: string
+                  }
+                  Update: {
+                    "created_at"?: string,"id"?: string,"job_id"?: string,"label"?: string | null,"manual_id"?: string,"page"?: number,"user_id"?: string
+                  }
+                  Relationships: [
+                    {
+      foreignKeyName: "job_manual_refs_job_id_user_id_fkey"
+      columns: ["job_id","user_id"]
+isOneToOne: false
+      referencedRelation: "jobs"
+      referencedColumns: ["id","user_id"]
+    },{
+      foreignKeyName: "job_manual_refs_manual_id_user_id_fkey"
+      columns: ["manual_id","user_id"]
+isOneToOne: false
+      referencedRelation: "manuals"
+      referencedColumns: ["id","user_id"]
+    }
+                  ]
+                },"job_parts": {
                   Row: {
                     "created_at": string,"id": string,"job_id": string,"name": string,"part_number": string | null,"quantity": number,"sort_order": number,"unit_cost_cents": number,"user_id": string
                   }
@@ -111,6 +136,63 @@ isOneToOne: false
       referencedColumns: ["id","user_id"]
     }
                   ]
+                },"manual_chunks": {
+                  Row: {
+                    "chunk_index": number,"content": string,"created_at": string,"embedding": string | null,"fts": unknown,"id": string,"manual_id": string,"page_end": number,"page_start": number,"section_path": string | null,"segments": NonNullable<Json>,"token_count": number | null,"user_id": string,"vehicle_id": string
+                  }
+                  Insert: {
+                    "chunk_index": number,"content": string,"created_at"?: string,"embedding"?: string | null,"fts"?: never,"id"?: string,"manual_id": string,"page_end": number,"page_start": number,"section_path"?: string | null,"segments": NonNullable<Json>,"token_count"?: number | null,"user_id": string,"vehicle_id": string
+                  }
+                  Update: {
+                    "chunk_index"?: number,"content"?: string,"created_at"?: string,"embedding"?: string | null,"fts"?: never,"id"?: string,"manual_id"?: string,"page_end"?: number,"page_start"?: number,"section_path"?: string | null,"segments"?: NonNullable<Json>,"token_count"?: number | null,"user_id"?: string,"vehicle_id"?: string
+                  }
+                  Relationships: [
+                    {
+      foreignKeyName: "manual_chunks_manual_id_user_id_fkey"
+      columns: ["manual_id","user_id"]
+isOneToOne: false
+      referencedRelation: "manuals"
+      referencedColumns: ["id","user_id"]
+    }
+                  ]
+                },"manual_pages": {
+                  Row: {
+                    "blocks": NonNullable<Json>,"char_count": number,"created_at": string,"manual_id": string,"page_number": number,"source": string,"text": string,"user_id": string
+                  }
+                  Insert: {
+                    "blocks"?: NonNullable<Json>,"char_count"?: number,"created_at"?: string,"manual_id": string,"page_number": number,"source": string,"text"?: string,"user_id": string
+                  }
+                  Update: {
+                    "blocks"?: NonNullable<Json>,"char_count"?: number,"created_at"?: string,"manual_id"?: string,"page_number"?: number,"source"?: string,"text"?: string,"user_id"?: string
+                  }
+                  Relationships: [
+                    {
+      foreignKeyName: "manual_pages_manual_id_user_id_fkey"
+      columns: ["manual_id","user_id"]
+isOneToOne: false
+      referencedRelation: "manuals"
+      referencedColumns: ["id","user_id"]
+    }
+                  ]
+                },"manuals": {
+                  Row: {
+                    "chunk_count": number,"created_at": string,"error": string | null,"id": string,"ingest_cost_usd": number,"ocr_pages": number,"original_filename": string | null,"page_count": number | null,"pages_done": number,"processed_at": string | null,"size_bytes": number | null,"stage": string | null,"status": Database["public"]['Enums']["manual_status"],"storage_path": string,"title": string,"updated_at": string,"user_id": string,"vehicle_id": string
+                  }
+                  Insert: {
+                    "chunk_count"?: number,"created_at"?: string,"error"?: string | null,"id"?: string,"ingest_cost_usd"?: number,"ocr_pages"?: number,"original_filename"?: string | null,"page_count"?: number | null,"pages_done"?: number,"processed_at"?: string | null,"size_bytes"?: number | null,"stage"?: string | null,"status"?: Database["public"]['Enums']["manual_status"],"storage_path": string,"title": string,"updated_at"?: string,"user_id"?: string,"vehicle_id": string
+                  }
+                  Update: {
+                    "chunk_count"?: number,"created_at"?: string,"error"?: string | null,"id"?: string,"ingest_cost_usd"?: number,"ocr_pages"?: number,"original_filename"?: string | null,"page_count"?: number | null,"pages_done"?: number,"processed_at"?: string | null,"size_bytes"?: number | null,"stage"?: string | null,"status"?: Database["public"]['Enums']["manual_status"],"storage_path"?: string,"title"?: string,"updated_at"?: string,"user_id"?: string,"vehicle_id"?: string
+                  }
+                  Relationships: [
+                    {
+      foreignKeyName: "manuals_vehicle_id_user_id_fkey"
+      columns: ["vehicle_id","user_id"]
+isOneToOne: false
+      referencedRelation: "vehicles"
+      referencedColumns: ["id","user_id"]
+    }
+                  ]
                 },"profiles": {
                   Row: {
                     "created_at": string,"currency": string,"display_name": string | null,"distance_unit": string,"id": string,"updated_at": string
@@ -123,6 +205,25 @@ isOneToOne: false
                   }
                   Relationships: [
                     
+                  ]
+                },"qa_questions": {
+                  Row: {
+                    "answer": string,"candidates": NonNullable<Json>,"citations": NonNullable<Json>,"cost_usd": number,"created_at": string,"found": boolean,"id": string,"latency_ms": number | null,"model": string | null,"question": string,"user_id": string,"vehicle_id": string,"warnings": NonNullable<Json>
+                  }
+                  Insert: {
+                    "answer": string,"candidates"?: NonNullable<Json>,"citations"?: NonNullable<Json>,"cost_usd"?: number,"created_at"?: string,"found": boolean,"id"?: string,"latency_ms"?: number | null,"model"?: string | null,"question": string,"user_id": string,"vehicle_id": string,"warnings"?: NonNullable<Json>
+                  }
+                  Update: {
+                    "answer"?: string,"candidates"?: NonNullable<Json>,"citations"?: NonNullable<Json>,"cost_usd"?: number,"created_at"?: string,"found"?: boolean,"id"?: string,"latency_ms"?: number | null,"model"?: string | null,"question"?: string,"user_id"?: string,"vehicle_id"?: string,"warnings"?: NonNullable<Json>
+                  }
+                  Relationships: [
+                    {
+      foreignKeyName: "qa_questions_vehicle_id_user_id_fkey"
+      columns: ["vehicle_id","user_id"]
+isOneToOne: false
+      referencedRelation: "vehicles"
+      referencedColumns: ["id","user_id"]
+    }
                   ]
                 },"reminders": {
                   Row: {
@@ -141,6 +242,31 @@ isOneToOne: false
 isOneToOne: false
       referencedRelation: "vehicles"
       referencedColumns: ["id","user_id"]
+    }
+                  ]
+                },"usage_events": {
+                  Row: {
+                    "cost_usd": number,"created_at": string,"id": string,"input_tokens": number,"kind": Database["public"]['Enums']["usage_kind"],"manual_id": string | null,"model": string,"output_tokens": number,"pages": number,"provider": string,"question_id": string | null,"user_id": string
+                  }
+                  Insert: {
+                    "cost_usd"?: number,"created_at"?: string,"id"?: string,"input_tokens"?: number,"kind": Database["public"]['Enums']["usage_kind"],"manual_id"?: string | null,"model": string,"output_tokens"?: number,"pages"?: number,"provider": string,"question_id"?: string | null,"user_id": string
+                  }
+                  Update: {
+                    "cost_usd"?: number,"created_at"?: string,"id"?: string,"input_tokens"?: number,"kind"?: Database["public"]['Enums']["usage_kind"],"manual_id"?: string | null,"model"?: string,"output_tokens"?: number,"pages"?: number,"provider"?: string,"question_id"?: string | null,"user_id"?: string
+                  }
+                  Relationships: [
+                    {
+      foreignKeyName: "usage_events_manual_id_fkey"
+      columns: ["manual_id"]
+isOneToOne: false
+      referencedRelation: "manuals"
+      referencedColumns: ["id"]
+    },{
+      foreignKeyName: "usage_events_question_id_fkey"
+      columns: ["question_id"]
+isOneToOne: false
+      referencedRelation: "qa_questions"
+      referencedColumns: ["id"]
     }
                   ]
                 },"vehicles": {
@@ -177,10 +303,15 @@ isOneToOne: false
           Functions: {
             "save_job":
 { Args: { "job": Json,"parts"?: Json,"videos"?: Json }; Returns: string
+                           },
+"search_manual_chunks":
+{ Args: { "p_limit"?: number,"p_query_embedding": string,"p_query_text": string,"p_vehicle_id": string }; Returns: {
+              "content": string,"id": string,"manual_id": string,"manual_title": string,"page_end": number,"page_start": number,"rrf_score": number,"section_path": string,"segments": Json,"text_rank": number,"vector_rank": number
+            }[]
                            }
           }
           Enums: {
-            "job_type": "maintenance"|"upgrade"|"repair"
+            "job_type": "maintenance"|"upgrade"|"repair","manual_status": "uploading"|"queued"|"processing"|"ready"|"failed","usage_kind": "ocr"|"embed_document"|"embed_query"|"rerank"|"answer"
           }
           CompositeTypes: {
             [_ in never]: never
@@ -300,7 +431,7 @@ export const Constants = {
           }
         },"public": {
           Enums: {
-            "job_type": ["maintenance", "upgrade", "repair"]
+            "job_type": ["maintenance", "upgrade", "repair"],"manual_status": ["uploading", "queued", "processing", "ready", "failed"],"usage_kind": ["ocr", "embed_document", "embed_query", "rerank", "answer"]
           }
         }
 } as const
