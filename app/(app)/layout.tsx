@@ -11,11 +11,16 @@ export default async function AppLayout({ children }: LayoutProps<"/">) {
           <Link href="/vehicles" className="text-lg font-bold">
             Garage Log
           </Link>
-          <form action={signOut}>
-            <button className="min-h-11 px-2 text-sm text-zinc-500 hover:text-foreground" title={user.email}>
-              Sign out
-            </button>
-          </form>
+          <div className="flex items-center">
+            <Link href="/settings" className="flex min-h-11 items-center px-2 text-sm text-zinc-500 hover:text-foreground">
+              Settings
+            </Link>
+            <form action={signOut}>
+              <button className="min-h-11 px-2 text-sm text-zinc-500 hover:text-foreground" title={user.email}>
+                Sign out
+              </button>
+            </form>
+          </div>
         </div>
       </header>
       <main className="mx-auto w-full max-w-2xl flex-1 px-4 py-6">{children}</main>

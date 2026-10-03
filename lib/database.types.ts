@@ -175,7 +175,9 @@ isOneToOne: false
                 }
           }
           Functions: {
-            [_ in never]: never
+            "save_job":
+{ Args: { "job": Json,"parts"?: Json,"videos"?: Json }; Returns: string
+                           }
           }
           Enums: {
             "job_type": "maintenance"|"upgrade"|"repair"

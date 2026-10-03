@@ -36,6 +36,7 @@ Local email confirmation is disabled, so sign-up logs you straight in.
 npm test          # unit tests (no database)
 npm run test:db   # data-isolation (RLS) + database tests; needs `npm run db:start`
 npm run test:all  # both
+npm run test:e2e  # Playwright, phone viewport; builds and starts the app on :3100
 npm run lint && npm run typecheck
 ```
 
@@ -63,6 +64,23 @@ npm run db:types                    # regenerate lib/database.types.ts (CI check
 
 Phase 2 keys (`ANTHROPIC_API_KEY`, `VOYAGE_API_KEY`, Inngest keys) are listed in `.env.example`.
 
-## Deploying
+## Deploying (Vercel + Supabase)
 
-Deployment instructions are added at the end of Phase 1.
+1. **Create a Supabase project** (Pro plan recommended — see `docs/PLAN.md`, decision 5).
+2. **Apply migrations:**
+   ```bash
+   npx supabase login
+   npx supabase link --project-ref <your-project-ref>
+   npx supabase db push
+   ```
+3. **Auth settings** (Supabase dashboard → Authentication → URL Configuration):
+   set *Site URL* to your Vercel URL and add `https://<your-domain>/auth/confirm` to *Redirect URLs*.
+   Email confirmation is on by default in hosted projects; sign-up sends a link that lands on `/auth/confirm`.
+   The built-in email sender is rate-limited — configure custom SMTP before inviting other users.
+4. **Create the Vercel project** from this repo and set the environment variables above
+   (`NEXT_PUBLIC_SUPABASE_URL`, `NEXT_PUBLIC_SUPABASE_ANON_KEY`) for Production and Preview.
+5. Deploy. Vercel builds with `next build`; no extra configuration is needed.
+
+## Known limitations
+
+See [`docs/LIMITATIONS.md`](docs/LIMITATIONS.md).
