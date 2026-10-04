@@ -12,6 +12,9 @@ export default async function AppLayout({ children }: LayoutProps<"/">) {
             Garage Log
           </Link>
           <div className="flex items-center">
+            <Link href="/usage" className="flex min-h-11 items-center px-2 text-sm text-zinc-500 hover:text-foreground">
+              Usage
+            </Link>
             <Link href="/settings" className="flex min-h-11 items-center px-2 text-sm text-zinc-500 hover:text-foreground">
               Settings
             </Link>

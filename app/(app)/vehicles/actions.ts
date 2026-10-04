@@ -61,14 +61,17 @@ export async function deleteVehicle(vehicleId: string) {
   const { supabase, user } = await requireUser();
 
   // Collect files first; rows cascade on delete but storage objects don't.
-  const [{ data: vehicle }, { data: photos }] = await Promise.all([
+  const [{ data: vehicle }, { data: photos }, { data: manuals }] = await Promise.all([
     supabase.from("vehicles").select("cover_photo_path").eq("id", vehicleId).single(),
     supabase.from("job_photos").select("storage_path, jobs!inner(vehicle_id)").eq("jobs.vehicle_id", vehicleId),
+    supabase.from("manuals").select("storage_path").eq("vehicle_id", vehicleId),
   ]);
 
   const { error } = await supabase.from("vehicles").delete().eq("id", vehicleId);
   if (error) throw new Error("Couldn't delete the vehicle.");
 
+  const manualPaths = (manuals ?? []).map((m) => m.storage_path);
+  if (manualPaths.length) await supabase.storage.from("manuals").remove(manualPaths);
   const jobPaths = (photos ?? []).map((p) => p.storage_path);
   if (jobPaths.length) await supabase.storage.from(BUCKETS.job).remove(jobPaths);
   if (vehicle?.cover_photo_path) await supabase.storage.from(BUCKETS.vehicle).remove([vehicle.cover_photo_path]);

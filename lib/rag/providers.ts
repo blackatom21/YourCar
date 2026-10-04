@@ -17,6 +17,10 @@ export async function getProviders(): Promise<Providers> {
   if (process.env.RAG_PROVIDERS === "fake") {
     return { embedder: fakeEmbedder, reranker: fakeReranker, ocr: makeFakeOcr() };
   }
+  const missing = ["ANTHROPIC_API_KEY", "VOYAGE_API_KEY"].filter((k) => !process.env[k]);
+  if (missing.length) {
+    throw new Error(`Manual AI isn't configured on the server (missing ${missing.join(", ")}).`);
+  }
   const [{ voyageEmbedder, voyageReranker }, { claudeOcr }] = await Promise.all([import("./voyage"), import("./ocr")]);
   return { embedder: voyageEmbedder, reranker: voyageReranker, ocr: claudeOcr };
 }

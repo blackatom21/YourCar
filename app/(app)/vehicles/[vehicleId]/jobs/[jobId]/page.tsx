@@ -1,5 +1,6 @@
 import Link from "next/link";
 import { notFound } from "next/navigation";
+import { ManualRefs, type ManualRef } from "@/components/jobs/manual-refs";
 import { TypeBadge } from "@/components/jobs/type-badge";
 import { YouTubeEmbed } from "@/components/jobs/youtube-embed";
 import { buttonClass } from "@/components/ui/button-styles";
@@ -12,14 +13,17 @@ export default async function JobPage({ params }: PageProps<"/vehicles/[vehicleI
   const { vehicleId, jobId } = await params;
   const [{ supabase }, profile] = await Promise.all([requireUser(), getProfile()]);
 
-  const { data: job } = await supabase
-    .from("jobs")
-    .select(
-      "*, vehicles(id, year, make, model, trim), reminders(title), job_parts(*), job_videos(*), job_photos(id, storage_path, sort_order, width, height, caption)",
-    )
-    .eq("id", jobId)
-    .eq("vehicle_id", vehicleId)
-    .maybeSingle();
+  const [{ data: job }, { data: manuals }] = await Promise.all([
+    supabase
+      .from("jobs")
+      .select(
+        "*, vehicles(id, year, make, model, trim), reminders(title), job_parts(*), job_videos(*), job_photos(id, storage_path, sort_order, width, height, caption), job_manual_refs(id, page, label, created_at, manual:manuals(id, title))",
+      )
+      .eq("id", jobId)
+      .eq("vehicle_id", vehicleId)
+      .maybeSingle(),
+    supabase.from("manuals").select("id, title, page_count").eq("vehicle_id", vehicleId).eq("status", "ready").order("title"),
+  ]);
   if (!job || !job.vehicles) notFound();
 
   const bySort = <T extends { sort_order: number }>(rows: T[]) => [...rows].sort((a, b) => a.sort_order - b.sort_order);
@@ -115,6 +119,12 @@ export default async function JobPage({ params }: PageProps<"/vehicles/[vehicleI
           </ul>
         </section>
       )}
+
+      <ManualRefs
+        jobId={job.id}
+        refs={[...job.job_manual_refs].sort((a, b) => a.created_at.localeCompare(b.created_at)) as ManualRef[]}
+        manuals={manuals ?? []}
+      />
 
       {videos.length > 0 && (
         <section className="flex flex-col gap-3">

@@ -26,10 +26,11 @@ export default async function VehiclePage({ params, searchParams }: PageProps<"/
     .order("created_at", { ascending: false });
   if (filter) jobsQuery = jobsQuery.eq("type", filter);
 
-  const [{ data: vehicle }, { data: jobs }, { data: reminders }] = await Promise.all([
+  const [{ data: vehicle }, { data: jobs }, { data: reminders }, { count: manualCount }] = await Promise.all([
     supabase.from("vehicles").select("*").eq("id", vehicleId).maybeSingle(),
     jobsQuery,
     supabase.from("reminder_status").select("*").eq("vehicle_id", vehicleId).eq("active", true),
+    supabase.from("manuals").select("id", { count: "exact", head: true }).eq("vehicle_id", vehicleId),
   ]);
   if (!vehicle) notFound();
 
@@ -73,6 +74,14 @@ export default async function VehiclePage({ params, searchParams }: PageProps<"/
         <Link href={`/vehicles/${vehicle.id}/jobs/new`} className={buttonClass()}>
           + Log a job
         </Link>
+        <div className="grid grid-cols-2 gap-2">
+          <Link href={`/vehicles/${vehicle.id}/ask`} className={buttonClass("secondary")}>
+            Ask manuals
+          </Link>
+          <Link href={`/vehicles/${vehicle.id}/manuals`} className={buttonClass("secondary")}>
+            Manuals{manualCount ? ` (${manualCount})` : ""}
+          </Link>
+        </div>
       </header>
 
       <ReminderList vehicleId={vehicle.id} reminders={sortedReminders} distanceUnit={profile.distance_unit} />

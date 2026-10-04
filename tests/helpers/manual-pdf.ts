@@ -41,3 +41,47 @@ export async function buildManualPdf(pages: FixturePage[]): Promise<Uint8Array> 
   }
   return doc.save();
 }
+
+/** A 6-page "manual": axle procedures with a torque table, an engine section, and one scanned page. */
+export function tacomaManualPdf() {
+  return buildManualPdf([
+    {
+      heading: "REAR AXLE",
+      subheading: "Differential Oil Replacement",
+      lines: [
+        "1. Remove the rear differential filler plug and gasket.",
+        "2. Remove the drain plug and gasket and drain the oil.",
+        "3. Install the drain plug with a new gasket.",
+        "Torque: 49 N*m (500 kgf*cm, 36 ft*lbf)",
+        "4. Fill with hypoid gear oil API GL-5 SAE 75W-85.",
+        "Standard capacity: 2.65 liters (2.80 US qts)",
+      ],
+    },
+    {
+      lines: [
+        "5. Install the filler plug with a new gasket.",
+        "Torque: 49 N*m (500 kgf*cm, 36 ft*lbf)",
+        "Check for leaks after a short test drive.",
+      ],
+    },
+    {
+      heading: "ENGINE",
+      subheading: "Engine Oil Replacement",
+      lines: [
+        "1. Remove the oil drain plug and gasket and drain the engine oil.",
+        "2. Install a new gasket and the drain plug.",
+        "Torque: 40 N*m (408 kgf*cm, 30 ft*lbf)",
+        "Oil capacity with filter: 5.7 liters (6.0 US qts)",
+      ],
+    },
+    { scanned: true },
+    {
+      heading: "BRAKES",
+      subheading: "Front Brake Pads",
+      lines: ["Minimum pad thickness: 1.0 mm (0.039 in.)", "Caliper bracket bolt torque: 123 N*m (1250 kgf*cm, 91 ft*lbf)"],
+    },
+    {
+      lines: ["Bleed the brake system after replacing calipers.", "Use only SAE J1703 or FMVSS No. 116 DOT 3 fluid."],
+    },
+  ]);
+}
