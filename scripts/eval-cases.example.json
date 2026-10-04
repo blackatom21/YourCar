@@ -1,0 +1,9 @@
+{
+  "userId": "00000000-0000-0000-0000-000000000000",
+  "vehicleId": "00000000-0000-0000-0000-000000000000",
+  "cases": [
+    { "question": "What is the torque spec for the rear axle drain plug?", "expect": "found", "mustContain": ["N"], "pages": [] },
+    { "question": "What is the rear differential oil capacity?", "expect": "found" },
+    { "question": "What is the recommended tire pressure for towing on the moon?", "expect": "not_found" }
+  ]
+}
