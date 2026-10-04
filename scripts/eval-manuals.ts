@@ -37,7 +37,7 @@ async function main() {
   const { askQuestion } = await import("../lib/rag/answer");
   const { voyageEmbedder, voyageReranker } = await import("../lib/rag/voyage");
   const { claudeAnswerLlm } = await import("../lib/rag/claude-answer");
-  const admin = createClient<Database>(process.env.NEXT_PUBLIC_SUPABASE_URL!, process.env.SUPABASE_SERVICE_ROLE_KEY!, {
+  const admin = createClient<Database>(process.env.NEXT_PUBLIC_SUPABASE_URL!, (process.env.SUPABASE_SECRET_KEY || process.env.SUPABASE_SERVICE_ROLE_KEY)!, {
     auth: { persistSession: false },
   });
 

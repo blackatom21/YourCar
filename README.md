@@ -37,7 +37,7 @@ Requirements: Node 20.9+ and Docker (for the local Supabase stack).
 npm install
 npm run db:start          # starts Postgres/Auth/Storage in Docker and applies migrations
 cp .env.example .env.local
-# Fill NEXT_PUBLIC_SUPABASE_ANON_KEY from `npx supabase status`
+# Fill NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY and SUPABASE_SECRET_KEY from `npx supabase status`
 npm run dev               # http://localhost:3000
 ```
 
@@ -80,8 +80,8 @@ npm run db:types                    # regenerate lib/database.types.ts (CI check
 | Name | Where | Purpose |
 |---|---|---|
 | `NEXT_PUBLIC_SUPABASE_URL` | client + server | Supabase project URL |
-| `NEXT_PUBLIC_SUPABASE_ANON_KEY` | client + server | Public anon key (RLS protects data) |
-| `SUPABASE_SERVICE_ROLE_KEY` | server only | Ingestion worker, Q&A and cost records. Never expose. |
+| `NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY` (or legacy `NEXT_PUBLIC_SUPABASE_ANON_KEY`) | client + server | Public key (RLS protects data); publishable key preferred |
+| `SUPABASE_SECRET_KEY` (or legacy `SUPABASE_SERVICE_ROLE_KEY`) | server only | Ingestion worker, Q&A and cost records. Never expose. Secret key preferred. |
 | `ANTHROPIC_API_KEY` | server only | Answers (Claude Opus 5.5) and OCR (Claude Haiku 4.5) |
 | `VOYAGE_API_KEY` | server only | Embeddings and reranking |
 | `INNGEST_EVENT_KEY`, `INNGEST_SIGNING_KEY` | server only | Background ingestion in production |
