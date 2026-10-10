@@ -5,6 +5,7 @@ import { ConfirmButton } from "@/components/ui/confirm-button";
 import { VehicleForm } from "@/components/vehicles/vehicle-form";
 import { getProfile } from "@/lib/profile";
 import { requireUser } from "@/lib/supabase/server";
+import { parseSpecs } from "@/lib/validation";
 
 export const metadata = { title: "Edit vehicle" };
 
@@ -40,6 +41,7 @@ export default async function EditVehiclePage({ params, searchParams }: PageProp
           current_mileage: String(v.current_mileage),
           purchase_date: v.purchase_date ?? "",
           notes: v.notes ?? "",
+          specs: parseSpecs(v.specs),
         }}
       />
       <form action={deleteVehicle.bind(null, v.id)} className="mt-6 border-t border-zinc-200 pt-6 dark:border-zinc-800">

@@ -13,7 +13,7 @@ export default async function NewVehiclePage() {
         userId={user.id}
         vehicleId={null}
         distanceUnit={profile.distance_unit}
-        initial={{ year: "", make: "", model: "", trim: "", vin: "", engine: "", current_mileage: "", purchase_date: "", notes: "" }}
+        initial={{ year: "", make: "", model: "", trim: "", vin: "", engine: "", current_mileage: "", purchase_date: "", notes: "", specs: [] }}
       />
     </section>
   );

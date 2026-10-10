@@ -8,7 +8,7 @@ import { formatDate, formatMileage, formatMoney, vehicleName } from "@/lib/forma
 import { getProfile } from "@/lib/profile";
 import { BUCKETS, signedUrls } from "@/lib/storage";
 import { requireUser } from "@/lib/supabase/server";
-import { jobTypes, type JobType } from "@/lib/validation";
+import { jobTypes, parseSpecs, type JobType } from "@/lib/validation";
 
 const STATUS_ORDER = { overdue: 0, due_soon: 1, never_done: 2, ok: 3 } as const;
 
@@ -46,6 +46,7 @@ export default async function VehiclePage({ params, searchParams }: PageProps<"/
     byYear.set(year, [...(byYear.get(year) ?? []), job]);
   }
   const totalSpent = (jobs ?? []).reduce((s, j) => s + j.total_cost_cents, 0);
+  const specs = parseSpecs(vehicle.specs);
 
   const chip = (active: boolean) =>
     `min-h-10 rounded-full px-4 text-sm font-medium flex items-center capitalize ${
@@ -71,6 +72,19 @@ export default async function VehiclePage({ params, searchParams }: PageProps<"/
         </div>
         <MileageUpdater vehicleId={vehicle.id} mileage={vehicle.current_mileage} unit={profile.distance_unit} />
         {vehicle.notes && <p className="whitespace-pre-wrap text-sm text-zinc-600 dark:text-zinc-400">{vehicle.notes}</p>}
+        {specs.length > 0 && (
+          <details className="rounded-lg border border-zinc-200 p-3 dark:border-zinc-800">
+            <summary className="min-h-8 cursor-pointer font-medium">Specs ({specs.length})</summary>
+            <dl className="mt-2 grid grid-cols-[minmax(0,2fr)_minmax(0,3fr)] gap-x-3 gap-y-2 text-sm">
+              {specs.map((s, i) => (
+                <div key={i} className="contents">
+                  <dt className="text-zinc-500">{s.label}</dt>
+                  <dd className="break-words">{s.value}</dd>
+                </div>
+              ))}
+            </dl>
+          </details>
+        )}
         <Link href={`/vehicles/${vehicle.id}/jobs/new`} className={buttonClass()}>
           + Log a job
         </Link>

@@ -227,13 +227,13 @@ isOneToOne: false
                   ]
                 },"reminders": {
                   Row: {
-                    "active": boolean,"created_at": string,"due_soon_days": number,"due_soon_miles": number,"id": string,"interval_miles": number | null,"interval_months": number | null,"last_done_mileage": number | null,"last_done_on": string | null,"title": string,"updated_at": string,"user_id": string,"vehicle_id": string
+                    "active": boolean,"category": string | null,"created_at": string,"due_soon_days": number,"due_soon_miles": number,"id": string,"interval_miles": number | null,"interval_months": number | null,"last_done_mileage": number | null,"last_done_on": string | null,"notes": string | null,"part_spec": string | null,"title": string,"updated_at": string,"user_id": string,"vehicle_id": string
                   }
                   Insert: {
-                    "active"?: boolean,"created_at"?: string,"due_soon_days"?: number,"due_soon_miles"?: number,"id"?: string,"interval_miles"?: number | null,"interval_months"?: number | null,"last_done_mileage"?: number | null,"last_done_on"?: string | null,"title": string,"updated_at"?: string,"user_id"?: string,"vehicle_id": string
+                    "active"?: boolean,"category"?: string | null,"created_at"?: string,"due_soon_days"?: number,"due_soon_miles"?: number,"id"?: string,"interval_miles"?: number | null,"interval_months"?: number | null,"last_done_mileage"?: number | null,"last_done_on"?: string | null,"notes"?: string | null,"part_spec"?: string | null,"title": string,"updated_at"?: string,"user_id"?: string,"vehicle_id": string
                   }
                   Update: {
-                    "active"?: boolean,"created_at"?: string,"due_soon_days"?: number,"due_soon_miles"?: number,"id"?: string,"interval_miles"?: number | null,"interval_months"?: number | null,"last_done_mileage"?: number | null,"last_done_on"?: string | null,"title"?: string,"updated_at"?: string,"user_id"?: string,"vehicle_id"?: string
+                    "active"?: boolean,"category"?: string | null,"created_at"?: string,"due_soon_days"?: number,"due_soon_miles"?: number,"id"?: string,"interval_miles"?: number | null,"interval_months"?: number | null,"last_done_mileage"?: number | null,"last_done_on"?: string | null,"notes"?: string | null,"part_spec"?: string | null,"title"?: string,"updated_at"?: string,"user_id"?: string,"vehicle_id"?: string
                   }
                   Relationships: [
                     {
@@ -271,13 +271,13 @@ isOneToOne: false
                   ]
                 },"vehicles": {
                   Row: {
-                    "archived_at": string | null,"cover_photo_path": string | null,"created_at": string,"current_mileage": number,"engine": string | null,"id": string,"make": string,"model": string,"notes": string | null,"purchase_date": string | null,"trim": string | null,"updated_at": string,"user_id": string,"vin": string | null,"year": number | null
+                    "archived_at": string | null,"cover_photo_path": string | null,"created_at": string,"current_mileage": number,"engine": string | null,"id": string,"make": string,"model": string,"notes": string | null,"purchase_date": string | null,"specs": NonNullable<Json>,"trim": string | null,"updated_at": string,"user_id": string,"vin": string | null,"year": number | null
                   }
                   Insert: {
-                    "archived_at"?: string | null,"cover_photo_path"?: string | null,"created_at"?: string,"current_mileage"?: number,"engine"?: string | null,"id"?: string,"make": string,"model": string,"notes"?: string | null,"purchase_date"?: string | null,"trim"?: string | null,"updated_at"?: string,"user_id"?: string,"vin"?: string | null,"year"?: number | null
+                    "archived_at"?: string | null,"cover_photo_path"?: string | null,"created_at"?: string,"current_mileage"?: number,"engine"?: string | null,"id"?: string,"make": string,"model": string,"notes"?: string | null,"purchase_date"?: string | null,"specs"?: NonNullable<Json>,"trim"?: string | null,"updated_at"?: string,"user_id"?: string,"vin"?: string | null,"year"?: number | null
                   }
                   Update: {
-                    "archived_at"?: string | null,"cover_photo_path"?: string | null,"created_at"?: string,"current_mileage"?: number,"engine"?: string | null,"id"?: string,"make"?: string,"model"?: string,"notes"?: string | null,"purchase_date"?: string | null,"trim"?: string | null,"updated_at"?: string,"user_id"?: string,"vin"?: string | null,"year"?: number | null
+                    "archived_at"?: string | null,"cover_photo_path"?: string | null,"created_at"?: string,"current_mileage"?: number,"engine"?: string | null,"id"?: string,"make"?: string,"model"?: string,"notes"?: string | null,"purchase_date"?: string | null,"specs"?: NonNullable<Json>,"trim"?: string | null,"updated_at"?: string,"user_id"?: string,"vin"?: string | null,"year"?: number | null
                   }
                   Relationships: [
                     
@@ -287,7 +287,7 @@ isOneToOne: false
           Views: {
             "reminder_status": {
                   Row: {
-                    "active": boolean | null,"created_at": string | null,"current_mileage": number | null,"days_remaining": number | null,"due_soon_days": number | null,"due_soon_miles": number | null,"id": string | null,"interval_miles": number | null,"interval_months": number | null,"last_done_mileage": number | null,"last_done_on": string | null,"miles_remaining": number | null,"next_due_mileage": number | null,"next_due_on": string | null,"status": string | null,"title": string | null,"updated_at": string | null,"user_id": string | null,"vehicle_id": string | null
+                    "active": boolean | null,"category": string | null,"created_at": string | null,"current_mileage": number | null,"days_remaining": number | null,"due_soon_days": number | null,"due_soon_miles": number | null,"id": string | null,"interval_miles": number | null,"interval_months": number | null,"last_done_mileage": number | null,"last_done_on": string | null,"miles_remaining": number | null,"next_due_mileage": number | null,"next_due_on": string | null,"notes": string | null,"part_spec": string | null,"status": string | null,"title": string | null,"updated_at": string | null,"user_id": string | null,"vehicle_id": string | null
                   }
                   Relationships: [
                     {

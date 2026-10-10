@@ -9,6 +9,18 @@ const optionalInt = (min: number, max: number) =>
     .transform((v) => v ?? null);
 const isoDate = z.string().regex(/^\d{4}-\d{2}-\d{2}$/, "Use a valid date.");
 
+export const specSchema = z.object({
+  label: z.string().trim().min(1, "Every spec needs a label.").max(60),
+  value: z.string().trim().min(1, "Every spec needs a value.").max(300),
+});
+export type Spec = z.output<typeof specSchema>;
+
+/** Reads a vehicle's stored specs defensively (the column is untyped jsonb). */
+export function parseSpecs(raw: unknown): Spec[] {
+  const parsed = z.array(specSchema).safeParse(raw);
+  return parsed.success ? parsed.data : [];
+}
+
 export const vehicleSchema = z.object({
   year: optionalInt(1885, 2100),
   make: z.string().trim().min(1, "Make is required.").max(60),
@@ -24,6 +36,7 @@ export const vehicleSchema = z.object({
   current_mileage: z.preprocess(blankToNull, z.coerce.number().int().min(0).max(10_000_000).nullable()).transform((v) => v ?? 0),
   purchase_date: z.preprocess(blankToNull, isoDate.nullable()),
   notes: optionalText(10000),
+  specs: z.array(specSchema).max(100, "Up to 100 specs per vehicle.").default([]),
 });
 export type VehicleInput = z.input<typeof vehicleSchema>;
 
@@ -74,6 +87,9 @@ export const reminderSchema = z
     interval_months: optionalInt(1, 240),
     last_done_mileage: optionalInt(0, 10_000_000),
     last_done_on: z.preprocess(blankToNull, isoDate.nullable()),
+    category: optionalText(40),
+    part_spec: optionalText(300),
+    notes: optionalText(2000),
   })
   .refine((r) => r.interval_miles != null || r.interval_months != null, {
     message: "Set a mileage interval, a time interval, or both.",
