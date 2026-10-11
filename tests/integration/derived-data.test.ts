@@ -119,10 +119,48 @@ describe("reminders", () => {
     expect((await status(r!.id)).status).toBe("overdue");
   });
 
+  it("exposes category, part and notes through the status view", async () => {
+    const { data: r } = await u.client
+      .from("reminders")
+      .insert({
+        vehicle_id: vehicleId,
+        title: "Rear axle fluid",
+        interval_miles: 30000,
+        category: "Driveline",
+        part_spec: "75W-85",
+        notes: "Off-road interval",
+      })
+      .select()
+      .single();
+    const s = await status(r!.id);
+    expect([s.category, s.part_spec, s.notes]).toEqual(["Driveline", "75W-85", "Off-road interval"]);
+    expect(s.status).toBe("never_done");
+  });
+
   it("rejects a reminder with no interval at all", async () => {
     const { error } = await u.client
       .from("reminders")
       .insert({ vehicle_id: vehicleId, title: "Nothing" });
+    expect(error).not.toBeNull();
+  });
+});
+
+describe("vehicle specs", () => {
+  it("stores an ordered list and defaults to empty", async () => {
+    let v = await u.client.from("vehicles").select("specs").eq("id", vehicleId).single();
+    expect(v.data!.specs).toEqual([]);
+
+    const specs = [
+      { label: "Engine oil", value: "5W-30" },
+      { label: "Tires", value: "275/60R20" },
+    ];
+    await u.client.from("vehicles").update({ specs }).eq("id", vehicleId);
+    v = await u.client.from("vehicles").select("specs").eq("id", vehicleId).single();
+    expect(v.data!.specs).toEqual(specs);
+  });
+
+  it("rejects specs that are not an array", async () => {
+    const { error } = await u.client.from("vehicles").update({ specs: { label: "x" } }).eq("id", vehicleId);
     expect(error).not.toBeNull();
   });
 });

@@ -12,6 +12,9 @@ function fromForm(formData: FormData) {
     interval_months: formData.get("interval_months"),
     last_done_mileage: formData.get("last_done_mileage")?.toString().replace(/,/g, ""),
     last_done_on: formData.get("last_done_on"),
+    category: formData.get("category"),
+    part_spec: formData.get("part_spec"),
+    notes: formData.get("notes"),
   });
 }
 
